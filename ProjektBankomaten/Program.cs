@@ -4,11 +4,17 @@
     {
         static void Main(string[] args)
         {
-            int[,] users = { {1, 1234},
-                             {2, 1234},
-                             {3, 1234},
-                             {4, 1234},
-                             {5, 1234} };
+            int[,] users = { {1, 1337},
+                             {2, 9988},
+                             {3, 4550},
+                             {4, 2003},
+                             {5, 5858} };
+
+            string[] userLegalName = { "Viktor",
+                                       "Sven",
+                                       "Erik",
+                                       "Björn",
+                                       "Anna" };
 
             string[][] userAccounts =
             {
@@ -21,20 +27,50 @@
 
             double[][] accountBalances =
             {
-                new double[] {},
-                new double[] {},
-                new double[] {},
-                new double[] {},
-                new double[] {},
+                new double[] {17349, 35900, 27500},
+                new double[] {22539},
+                new double[] {14500, 42350},
+                new double[] {29559, 35000, 115000},
+                new double[] {18953, 54250},
             };
 
-            Console.WriteLine("Hej! Välkommen till bankomaten!");
+            bool programActive = true;
+
+            while (programActive)
+            {
+                Console.WriteLine("Hej! Välkommen till bankomaten!");
+                Console.Write("Var god mata in ditt användar-ID: ");
+                int userName = Int32.Parse(Console.ReadLine());
+                int userIndex = FindUserIndex(users, userName);
+
+                if (userIndex != 666)
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        Console.Clear();
+                        Console.Write("Var god mata in din pinkod: ");
+                        int userPass = Int32.Parse(Console.ReadLine());
+                        if (userPass == users[userIndex, 1])
+                        {
+                            Console.WriteLine($"Välkommen {userLegalName[userIndex]}!");
+                            Console.ReadKey();
+                        }
+                    }
+                }
+            }
+
         }
 
-        static void UserLogin()
+        static int FindUserIndex(int[,] users, int userName)
         {
-            Console.Write("Var god mata in ditt användarnamn: ");
-            string userName = Console.ReadLine();
+            for (int i = 0; i < users.GetLength(0); i++)
+            {
+                if (users[i, 0] == userName)
+                {
+                    return i;
+                }
+            }
+            return 666;
         }
     }
 }
