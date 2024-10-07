@@ -39,6 +39,8 @@
 
             while (programActive)
             {
+                Console.Clear();
+                DisplayLogo();
                 Console.WriteLine("Hej! Välkommen till bankomaten!");
                 Console.Write("Var god mata in ditt användar-ID: ");
                 int userName = Int32.Parse(Console.ReadLine());
@@ -49,6 +51,7 @@
                     for (int i = 0; i < 3; i++)
                     {
                         Console.Clear();
+                        DisplayLogo();
                         Console.Write("Var god mata in din pinkod: ");
                         int userPass = Int32.Parse(Console.ReadLine());
                         if (userPass == users[userIndex, 1])
@@ -65,6 +68,7 @@
                     while (loggedIn == true)
                     {
                         Console.Clear();
+                        DisplayLogo();
                         Console.WriteLine($"Välkommen {userLegalName[userIndex]}! Gör ditt menyval.");
                         switch (MainMenu())
                         {
@@ -78,11 +82,14 @@
                                 Withdraw(userIndex, userAccounts, accountBalances, users);
                                 break;
                             case 4:
-                                LogOut();
+                                loggedIn = false;
                                 break;
                         }
-                        Console.WriteLine("Tryck på valfri tangent för att återgå...");
-                        Console.ReadKey();
+                        if (loggedIn == true)
+                        {
+                            Console.WriteLine("Tryck på valfri tangent för att återgå...");
+                            Console.ReadKey();
+                        }
                     }
                 }
             }
@@ -131,6 +138,7 @@
         static void AccountOverview(int userIndex, string[][] userAccounts, double[][] accountBalances)
         {
             Console.Clear();
+            DisplayLogo();
             Console.WriteLine("Din kontoöversikt:");
             for (int i = 0; i < userAccounts[userIndex].Length; i++)
             {
@@ -144,6 +152,7 @@
         {
             ConsoleColor recentForegroundColor = Console.ForegroundColor;
             Console.Clear();
+            DisplayLogo();
             for (int i = 0; i < userAccounts[userIndex].Length; i++)
             {
                 int accountNumber = i + 1;
@@ -182,6 +191,7 @@
                 }
             }
             Console.Clear();
+            DisplayLogo();
             Console.WriteLine($"Dina nya saldon är: \n" +
                 $"{userAccounts[userIndex][accountFrom]}: {accountBalances[userIndex][accountFrom]:C} \n" +
                 $"{userAccounts[userIndex][accountTo]}: {accountBalances[userIndex][accountTo]:C}");
@@ -191,6 +201,7 @@
         {
             ConsoleColor recentForegroundColor = Console.ForegroundColor;
             Console.Clear();
+            DisplayLogo();
             for (int i = 0; i < userAccounts[userIndex].Length; i++)
             {
                 int accountNumber = i + 1;
@@ -240,12 +251,16 @@
                 }
             }
             Console.Clear();
+            DisplayLogo();
             Console.WriteLine($"Ditt nya saldo för {userAccounts[userIndex][accountChoice]} är: {accountBalances[userIndex][accountChoice]:C}");
         }
 
-        static void LogOut()
+        static void DisplayLogo()
         {
-
+            ConsoleColor recentForegroundColor = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("   :::     ::: :::    ::: :::::::::      :::     ::::    ::: :::    ::: \r\n  :+:     :+: :+:    :+: :+:    :+:   :+: :+:   :+:+:   :+: :+:   :+:   \r\n +:+     +:+ +:+    +:+ +:+    +:+  +:+   +:+  :+:+:+  +:+ +:+  +:+     \r\n+#+     +:+ +#++:++#++ +#++:++#+  +#++:++#++: +#+ +:+ +#+ +#++:++       \r\n+#+   +#+  +#+    +#+ +#+    +#+ +#+     +#+ +#+  +#+#+# +#+  +#+       \r\n#+#+#+#   #+#    #+# #+#    #+# #+#     #+# #+#   #+#+# #+#   #+#       \r\n ###     ###    ### #########  ###     ### ###    #### ###    ###       ");
+            Console.ForegroundColor = recentForegroundColor;
         }
     }
 }
