@@ -35,6 +35,7 @@
             };
 
             bool programActive = true;
+            bool loggedIn = false;
 
             while (programActive)
             {
@@ -52,12 +53,42 @@
                         int userPass = Int32.Parse(Console.ReadLine());
                         if (userPass == users[userIndex, 1])
                         {
-                            Console.WriteLine($"Välkommen {userLegalName[userIndex]}!");
-                            Console.ReadKey();
+                            loggedIn = true;
+                            break;
                         }
+                    }
+                    if (loggedIn != true)
+                    {
+                        programActive = false;
+                    }
+
+                    while (loggedIn == true)
+                    {
+                        Console.Clear();
+                        ConsoleColor recentForegroundColor = Console.ForegroundColor;
+                        Console.WriteLine($"Välkommen {userLegalName[userIndex]}! Gör ditt menyval.");
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write("1. ");
+                        Console.ForegroundColor = recentForegroundColor;
+                        Console.WriteLine("Se dina konton och saldo");
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write("2. ");
+                        Console.ForegroundColor = recentForegroundColor;
+                        Console.WriteLine("Överföring mellan konton");
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write("3. ");
+                        Console.ForegroundColor = recentForegroundColor;
+                        Console.WriteLine("Ta ut pengar");
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write("4. ");
+                        Console.ForegroundColor = recentForegroundColor;
+                        Console.WriteLine("Logga ut");
+                        Console.ReadKey();
                     }
                 }
             }
+            Console.WriteLine("Du har ej behörighet, stänger ner...");
+            Console.ReadKey();
 
         }
 
