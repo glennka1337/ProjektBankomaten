@@ -66,7 +66,7 @@
                     {
                         Console.Clear();
                         Console.WriteLine($"Välkommen {userLegalName[userIndex]}! Gör ditt menyval.");
-                        switch(MainMenu())
+                        switch (MainMenu())
                         {
                             case 1:
                                 AccountOverview(userIndex, userAccounts, accountBalances);
@@ -81,6 +81,7 @@
                                 LogOut();
                                 break;
                         }
+                        Console.WriteLine("Tryck på valfri tangent för att återgå...");
                         Console.ReadKey();
                     }
                 }
@@ -130,19 +131,60 @@
         static void AccountOverview(int userIndex, string[][] userAccounts, double[][] accountBalances)
         {
             Console.Clear();
+            Console.WriteLine("Din kontoöversikt:");
             for (int i = 0; i < userAccounts[userIndex].Length; i++)
             {
-                Console.WriteLine("Din kontoöversikt:");
                 string accountName = userAccounts[userIndex][i];
                 double accountBalance = accountBalances[userIndex][i];
                 Console.WriteLine($"{accountName}: {accountBalance:C}");
             }
-            Console.WriteLine("Tryck på valfri tangent för att återgå...");
         }
 
         static void Transfer(int userIndex, string[][] userAccounts, double[][] accountBalances)
         {
+            ConsoleColor recentForegroundColor = Console.ForegroundColor;
+            Console.Clear();
+            for (int i = 0; i < userAccounts[userIndex].Length; i++)
+            {
+                int accountNumber = i + 1;
+                string accountName = userAccounts[userIndex][i];
+                double accountBalance = accountBalances[userIndex][i];
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write($"{accountNumber}. ");
+                Console.ForegroundColor = recentForegroundColor;
+                Console.WriteLine($"{accountName}: {accountBalance:C}");
+            }
+            Console.Write("Välj konto att överföra från: ");
+            int accountFrom = Int32.Parse(Console.ReadLine());
+            Console.Write("Välj konto att överföra till: ");
+            int accountTo = Int32.Parse(Console.ReadLine());
 
+            accountFrom -= 1;
+            accountTo -= 1;
+
+            bool transactionComplete = false;
+
+            while (!transactionComplete)
+            {
+
+                Console.Write("Hur mycket vill du föra över? (kr): ");
+                int transferAmount = Int32.Parse(Console.ReadLine());
+
+                if (transferAmount <= accountBalances[userIndex][accountFrom] && transferAmount >= 0)
+                {
+                    accountBalances[userIndex][accountFrom] -= transferAmount;
+                    accountBalances[userIndex][accountTo] += transferAmount;
+                    transactionComplete = true;
+                }
+                else
+                {
+                    Console.WriteLine("Du har inte så mycket pengar. Försök igen.");
+                }
+            }
+            Console.Clear();
+            Console.WriteLine($"Dina nya saldon är: \n" +
+                $"{userAccounts[userIndex][accountFrom]}: {accountBalances[userIndex][accountFrom]:C} \n" +
+                $"{userAccounts[userIndex][accountTo]}: {accountBalances[userIndex][accountTo]:C}");
         }
 
         static void Withdraw()
