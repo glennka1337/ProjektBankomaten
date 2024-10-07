@@ -65,24 +65,22 @@
                     while (loggedIn == true)
                     {
                         Console.Clear();
-                        ConsoleColor recentForegroundColor = Console.ForegroundColor;
                         Console.WriteLine($"Välkommen {userLegalName[userIndex]}! Gör ditt menyval.");
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.Write("1. ");
-                        Console.ForegroundColor = recentForegroundColor;
-                        Console.WriteLine("Se dina konton och saldo");
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.Write("2. ");
-                        Console.ForegroundColor = recentForegroundColor;
-                        Console.WriteLine("Överföring mellan konton");
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.Write("3. ");
-                        Console.ForegroundColor = recentForegroundColor;
-                        Console.WriteLine("Ta ut pengar");
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.Write("4. ");
-                        Console.ForegroundColor = recentForegroundColor;
-                        Console.WriteLine("Logga ut");
+                        switch(MainMenu())
+                        {
+                            case 1:
+                                AccountOverview(userIndex, userAccounts, accountBalances);
+                                break;
+                            case 2:
+                                Transfer(userIndex, userAccounts, accountBalances);
+                                break;
+                            case 3:
+                                Withdraw();
+                                break;
+                            case 4:
+                                LogOut();
+                                break;
+                        }
                         Console.ReadKey();
                     }
                 }
@@ -102,6 +100,59 @@
                 }
             }
             return 666;
+        }
+
+        static int MainMenu()
+        {
+            ConsoleColor recentForegroundColor = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("1. ");
+            Console.ForegroundColor = recentForegroundColor;
+            Console.WriteLine("Se dina konton och saldo");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("2. ");
+            Console.ForegroundColor = recentForegroundColor;
+            Console.WriteLine("Överföring mellan konton");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("3. ");
+            Console.ForegroundColor = recentForegroundColor;
+            Console.WriteLine("Ta ut pengar");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("4. ");
+            Console.ForegroundColor = recentForegroundColor;
+            Console.WriteLine("Logga ut");
+
+            Console.Write("Ange ett menyval: ");
+            int menuChoice = Int32.Parse(Console.ReadLine());
+            return menuChoice;
+        }
+
+        static void AccountOverview(int userIndex, string[][] userAccounts, double[][] accountBalances)
+        {
+            Console.Clear();
+            for (int i = 0; i < userAccounts[userIndex].Length; i++)
+            {
+                Console.WriteLine("Din kontoöversikt:");
+                string accountName = userAccounts[userIndex][i];
+                double accountBalance = accountBalances[userIndex][i];
+                Console.WriteLine($"{accountName}: {accountBalance:C}");
+            }
+            Console.WriteLine("Tryck på valfri tangent för att återgå...");
+        }
+
+        static void Transfer(int userIndex, string[][] userAccounts, double[][] accountBalances)
+        {
+
+        }
+
+        static void Withdraw()
+        {
+
+        }
+
+        static void LogOut()
+        {
+
         }
     }
 }
