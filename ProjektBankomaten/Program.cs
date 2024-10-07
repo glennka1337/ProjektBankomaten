@@ -75,7 +75,7 @@
                                 Transfer(userIndex, userAccounts, accountBalances);
                                 break;
                             case 3:
-                                Withdraw();
+                                Withdraw(userIndex, userAccounts, accountBalances, users);
                                 break;
                             case 4:
                                 LogOut();
@@ -187,9 +187,60 @@
                 $"{userAccounts[userIndex][accountTo]}: {accountBalances[userIndex][accountTo]:C}");
         }
 
-        static void Withdraw()
+        static void Withdraw(int userIndex, string[][] userAccounts, double[][] accountBalances, int[,] users)
         {
+            ConsoleColor recentForegroundColor = Console.ForegroundColor;
+            Console.Clear();
+            for (int i = 0; i < userAccounts[userIndex].Length; i++)
+            {
+                int accountNumber = i + 1;
+                string accountName = userAccounts[userIndex][i];
+                double accountBalance = accountBalances[userIndex][i];
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write($"{accountNumber}. ");
+                Console.ForegroundColor = recentForegroundColor;
+                Console.WriteLine($"{accountName}: {accountBalance:C}");
+            }
+            Console.Write("Välj ett konto att ta ut pengar från: ");
+            int accountChoice = Int32.Parse(Console.ReadLine());
+            accountChoice -= 1;
+            bool inputAccepted = false;
+            int withdrawAmount = 0;
 
+            while (!inputAccepted)
+            {
+                Console.Write("Hur mycket du vill ta ut: ");
+                withdrawAmount = Int32.Parse(Console.ReadLine());
+                if (withdrawAmount <= accountBalances[userIndex][accountChoice] && withdrawAmount >= 0)
+                {
+                    inputAccepted = true;
+                }
+                else
+                {
+                    Console.WriteLine("Du har inte så mycket pengar. Försök igen.");
+                }
+            }
+
+
+            bool withdrawalComplete = false;
+
+            Console.Write("Du måste bekräfta din identitet för att genomföra denna handling, mata in din pinkod: ");
+            while (!withdrawalComplete)
+            {
+                int pinInput = Int32.Parse(Console.ReadLine());
+
+                if (pinInput == users[userIndex, 1])
+                {
+                    accountBalances[userIndex][accountChoice] -= withdrawAmount;
+                    withdrawalComplete = true;
+                }
+                else
+                {
+                    Console.Write("Felaktig pin kod, försök igen: ");
+                }
+            }
+            Console.Clear();
+            Console.WriteLine($"Ditt nya saldo för {userAccounts[userIndex][accountChoice]} är: {accountBalances[userIndex][accountChoice]:C}");
         }
 
         static void LogOut()
