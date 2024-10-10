@@ -4,6 +4,7 @@
     {
         static void Main(string[] args)
         {
+            //Setting all values for account names and pins, the account holders names, internal account names and their balances.
             int[,] users = { {1, 1337},
                              {2, 9988},
                              {3, 4550},
@@ -13,8 +14,8 @@
             string[] userLegalName = { "Viktor",
                                        "Sven",
                                        "Erik",
-                                       "Björn",
-                                       "Anna" };
+                                       "Pelle",
+                                       "Robin" };
 
             string[][] userAccounts =
             {
@@ -34,6 +35,7 @@
                 new double[] {18953, 54250},
             };
 
+            //Creates two booleans that handle how far the program can run, programActive is always true unless you fail your login attempts.
             bool programActive = true;
             bool loggedIn = false;
 
@@ -46,6 +48,7 @@
                 int userName = Int32.Parse(Console.ReadLine());
                 int userIndex = FindUserIndex(users, userName);
 
+                //If you input an invalid user ID the index gets set to 666 which this if-statement checks for.
                 if (userIndex != 666)
                 {
                     for (int i = 0; i < 3; i++)
@@ -60,16 +63,18 @@
                             break;
                         }
                     }
+                    //If you are not logged in after three attempts, the program shuts down.
                     if (loggedIn != true)
                     {
                         programActive = false;
                     }
 
+                    //Adds the options to select what to do inside the bank and calls for the main menu method.
                     while (loggedIn == true)
                     {
                         Console.Clear();
                         DisplayLogo();
-                        Console.WriteLine($"Välkommen {userLegalName[userIndex]}! Gör ditt menyval.");
+                        Console.WriteLine($"Välkommen {userLegalName[userIndex]}!");
                         switch (MainMenu())
                         {
                             case 1:
@@ -98,6 +103,7 @@
 
         }
 
+        //Searches for the user ID and converts it to a correctly indexed number.
         static int FindUserIndex(int[,] users, int userName)
         {
             for (int i = 0; i < users.GetLength(0); i++)
@@ -110,6 +116,7 @@
             return 666;
         }
 
+        //Displays the main menu and returns a menu choice.
         static int MainMenu()
         {
             ConsoleColor recentForegroundColor = Console.ForegroundColor;
@@ -135,6 +142,7 @@
             return menuChoice;
         }
 
+        //Displays the balance of your accounts.
         static void AccountOverview(int userIndex, string[][] userAccounts, double[][] accountBalances)
         {
             Console.Clear();
@@ -148,6 +156,7 @@
             }
         }
 
+        //Used for the transferring of money between internal accounts.
         static void Transfer(int userIndex, string[][] userAccounts, double[][] accountBalances)
         {
             ConsoleColor recentForegroundColor = Console.ForegroundColor;
@@ -168,6 +177,7 @@
             Console.Write("Välj konto att överföra till: ");
             int accountTo = Int32.Parse(Console.ReadLine());
 
+            //Lowers the number to account for indexing.
             accountFrom -= 1;
             accountTo -= 1;
 
@@ -179,6 +189,7 @@
                 Console.Write("Hur mycket vill du föra över? (kr): ");
                 int transferAmount = Int32.Parse(Console.ReadLine());
 
+                //Checks if there is enough money to perform the transaction and that you dont add a negative amount of money.
                 if (transferAmount <= accountBalances[userIndex][accountFrom] && transferAmount >= 0)
                 {
                     accountBalances[userIndex][accountFrom] -= transferAmount;
@@ -197,6 +208,7 @@
                 $"{userAccounts[userIndex][accountTo]}: {accountBalances[userIndex][accountTo]:C}");
         }
 
+        //Adds the method to withdraw money
         static void Withdraw(int userIndex, string[][] userAccounts, double[][] accountBalances, int[,] users)
         {
             ConsoleColor recentForegroundColor = Console.ForegroundColor;
@@ -240,6 +252,7 @@
             {
                 int pinInput = Int32.Parse(Console.ReadLine());
 
+                //Checks if the pin the user inputs is correct, withdraws the money if it is.
                 if (pinInput == users[userIndex, 1])
                 {
                     accountBalances[userIndex][accountChoice] -= withdrawAmount;
@@ -255,6 +268,7 @@
             Console.WriteLine($"Ditt nya saldo för {userAccounts[userIndex][accountChoice]} är: {accountBalances[userIndex][accountChoice]:C}");
         }
 
+        //Displays the ASCII art logo.
         static void DisplayLogo()
         {
             ConsoleColor recentForegroundColor = Console.ForegroundColor;
